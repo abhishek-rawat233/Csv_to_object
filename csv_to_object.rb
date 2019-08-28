@@ -53,7 +53,6 @@ else
   data_array = CsvConverter.new(filename)
   p data_array
   p data_array.filerows[1]
-  p data_array.filerows[0].city
   p data_array.filerows[0].name
   p data_array.filerows[0].age
   p data_array.filerows[0].city
