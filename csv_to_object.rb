@@ -43,7 +43,7 @@ class CsvConverter
   def validation(classname, method_names = [])
     raise WrongNamingConventionError, 'Please follow correct convention' unless CLASS_VALID =~ classname
     unless method_names.empty?
-      method_names.each { |method| raise WrongNamingConventionError, 'Please follow correct convention' unless METHOD_VALID =~ classname }
+      method_names.each { |method| raise WrongNamingConventionError, 'Please follow correct convention' unless METHOD_VALID =~ method }
     end
   end
 
