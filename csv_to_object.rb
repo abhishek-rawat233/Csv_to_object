@@ -1,6 +1,11 @@
+class WrongNamingConventionError < StandardError
+end
+
 require 'csv'
 class CsvConverter
   CLASS_NAME = /[[:word:]]+(?=.csv)/
+  CLASS_VALID = /[A-Z][[:alnum:]]*$/
+  METHOD_VALID = /[a-z][[:alnum:]]*$/
 
   attr_reader :filerows
   def initialize(filename)
@@ -14,7 +19,9 @@ class CsvConverter
   def getdata
     classname = @filename.match(CLASS_NAME)[0].capitalize
     filedata = reader
-    class_creator(classname, filedata.headers)
+    csvheader = filedata.headers
+    validation(classname, csvheader)
+    class_creator(classname, csvheader)
     datareader(classname, filedata)
   end
 
@@ -31,6 +38,13 @@ class CsvConverter
       end
     "
     klass.class_eval(klass_body)
+  end
+
+  def validation(classname, method_names = [])
+    raise WrongNamingConventionError, 'Please follow correct convention' unless CLASS_VALID =~ classname
+    unless method_names.empty?
+      method_names.each { |method| raise WrongNamingConventionError, 'Please follow correct convention' unless METHOD_VALID =~ classname }
+    end
   end
 
   def datareader(classname, filedata)
@@ -50,10 +64,14 @@ if ARGV.empty?
   puts 'please provide an input'
 else
   filename = ARGV[0]
-  data_array = CsvConverter.new(filename)
-  p data_array
-  p data_array.filerows[1]
-  p data_array.filerows[0].name
-  p data_array.filerows[0].age
-  p data_array.filerows[0].city
+  begin
+    data_array = CsvConverter.new(filename)
+    p data_array
+    p data_array.filerows[1]
+    p data_array.filerows[0].name
+    p data_array.filerows[0].age
+    p data_array.filerows[0].city
+  rescue => error
+    p error
+  end
 end
