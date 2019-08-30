@@ -1,6 +1,5 @@
-#<CsvConverter:0x000055d757ce8270 @filename="Person.csv", @filerows=[#<Person:0x000055d75788ad68 @name="gaurav", @age="23", @city="karnal">, #<Person:0x000055d757893990 @name="vilok", @age="23", @city="hissar">, #<Person:0x000055d75789beb0 @name="person3", @age="25", @city="city3">, #<Person:0x000055d7578e98e0 @name="person4", @age="26", @city="city4">]>
-#<Person:0x000055d757893990 @name="vilok", @age="23", @city="hissar">
-"karnal"
+#<CsvConverter:0x000055cc5477d488 @file_name="person.csv", @file_rows=[#<Person:0x000055cc54782b90 @name="gaurav", @age="23", @city="karnal">, #<Person:0x000055cc547824d8 @name="vilok", @age="23", @city="hissar">, #<Person:0x000055cc54781628 @name="person3", @age="25", @city="city3">, #<Person:0x000055cc547810d8 @name="person4", @age="26", @city="city4">], @class_ref=Person>
+#<Person:0x000055cc547824d8 @name="vilok", @age="23", @city="hissar">
 "gaurav"
 "23"
 "karnal"
