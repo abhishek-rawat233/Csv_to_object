@@ -1,19 +1,26 @@
-class WrongClassNameError < StandardError
-  def message
-    'Class name is already in use, please provide new name'
+class PredefinedConstantError < StandardError
+  def initialize(message = nil)
+    @message = message
+  end
+
+  def to_s
+    @message || 'Class name is already in use, please provide new name'
   end
 end
 
 class MethodNameError < StandardError
-  def message
-    'Please enter a valid method name'
+  def initialize(message = nil)
+    @message = message
+  end
+  def to_s
+    @message || 'Please enter a valid method name'
   end
 end
 
 require 'csv'
 class CsvConverter
-  CLASS_NAME = /[[:word:]]+(?=.csv)/
-  METHOD_VALID = /[a-z][[:alnum:]]*$/
+  FILE_NAME_EXTRACTOR = /[[:word:]]+(?=.csv)/
+  METHOD_NAME_VALIDATOR = /[a-z][[:alnum:]]*$/
 
   attr_reader :file_rows
   def initialize(file_name)
@@ -21,9 +28,9 @@ class CsvConverter
     @file_rows = []
   end
 
-  def get_data
-    class_name = @file_name.match(CLASS_NAME)[0].capitalize
-    file_data = reader
+  def save_objects
+    class_name = @file_name.match(FILE_NAME_EXTRACTOR)[0].capitalize
+    file_data = csv_reader
     csv_header = file_data.headers
     validation(class_name, csv_header)
     @class_ref = class_creator(class_name)
@@ -32,14 +39,14 @@ class CsvConverter
 
   private
   def validation(class_name, method_names = [])
-    raise WrongClassNameError if Object.const_defined? class_name
+    raise PredefinedConstantError if Object.const_defined? class_name
     unless method_names.empty?
-      method_names.each { |method| raise WrongNamingConventionError, 'Please follow correct convention' unless METHOD_VALID =~ class_name }
+      method_names.each { |method| raise WrongNamingConventionError.new("Please follow correct convention for #{method}") unless METHOD_NAME_VALIDATOR =~ method }
     end
   end
 
-  def reader
-    CSV.read(@file_name, :headers => true)
+  def csv_reader
+    CSV.read(@file_name, headers: true)
   end
 
   def class_creator(class_name)
@@ -77,7 +84,7 @@ else
   file_name = ARGV[0]
   begin
     data_array = CsvConverter.new(file_name)
-    data_array.get_data
+    data_array.save_objects
     p data_array
     p data_array.file_rows[1]
     p data_array.file_rows[0].name
