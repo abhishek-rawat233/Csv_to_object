@@ -1,5 +1,5 @@
 require_relative 'csv_to_object_converter.rb'
-file_name = '../lib/person.csv'
+file_name = 'person.csv'
 begin
   data_array = CsvConverter.new(file_name)
   data_array.save_objects
