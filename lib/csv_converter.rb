@@ -15,21 +15,25 @@ class CsvConverter
 
   def save_objects
     class_name = @file_name.match(FILE_NAME_EXTRACTOR)[0].capitalize
-    class_name_validator(class_name)
     file_data = file_reader
     header = file_data.headers
-    method_name_validator(header)
+    execute_validations(class_name, header)
     @class_ref = class_factory(class_name)
     object_recorder(header, file_data)
   end
 
   private
+  def execute_validations(name, method_list)
+    class_name_validator(name)
+    method_name_validator(method_list)
+  end
+
   def class_name_validator(name)
     raise PredefinedConstantError if Object.const_defined? name
     raise WrongNamingConventionError, "Please change the file name" unless CLASS_NAME_VALIDATOR =~ name
   end
 
-  def method_name_validator(class_name, method_names = [])
+  def method_name_validator(method_names = [])
     method_names.each { |method| raise WrongNamingConventionError, "Please follow correct convention for #{method}" unless METHOD_NAME_VALIDATOR =~ method }
   end
 
