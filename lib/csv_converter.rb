@@ -15,7 +15,7 @@ class CsvConverter
 
   def save_objects
     class_name = @file_name.match(FILE_NAME_EXTRACTOR)[0].capitalize
-    file_data = file_reader
+    file_data = read_file
     header = file_data.headers
     execute_validations(class_name, header)
     @class_ref = class_factory(class_name)
@@ -37,7 +37,7 @@ class CsvConverter
     method_names.each { |method| raise WrongNamingConventionError, "Please follow correct convention for #{method}" unless METHOD_NAME_VALIDATOR =~ method }
   end
 
-  def file_reader
+  def read_file
     CSV.read(@file_name, headers: true)
   end
 
